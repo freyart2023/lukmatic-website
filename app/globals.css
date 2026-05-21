@@ -3,25 +3,56 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --brand-orange: #F07C00;
+  --brand-black: #1A1A1A;
+  --brand-dark: #111111;
+  --font-montserrat: 'Montserrat', sans-serif;
+  --font-open-sans: 'Open Sans', sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--brand-black);
+  background: #ffffff;
+  font-family: var(--font-open-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-montserrat);
+  font-weight: 700;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  .font-heading {
+    font-family: var(--font-montserrat);
+  }
+  .font-body {
+    font-family: var(--font-open-sans);
+  }
+}
+
+@layer components {
+  .btn-orange {
+    @apply bg-[#F07C00] text-white font-bold px-6 py-3 rounded hover:bg-[#E65100] transition-colors duration-200 inline-block;
+    font-family: var(--font-montserrat);
+  }
+  .section-title {
+    font-family: var(--font-montserrat);
+    @apply font-bold text-3xl md:text-4xl text-[#1A1A1A] mb-4;
+  }
+  .section-subtitle {
+    font-family: var(--font-open-sans);
+    @apply text-gray-600 text-lg mb-8;
   }
 }

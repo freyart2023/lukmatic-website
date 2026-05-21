@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(Start-Process -NoNewWindow -FilePath \"npm\" -ArgumentList \"run\",\"dev\" -PassThru)",
+      "Bash(Select-Object -ExpandProperty Id)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "Bash(curl -L \"https://lukmatic.co.uk/wp-content/uploads/2024/01/Lukmatic-new-150x140.png\" -o \"C:\\\\Users\\\\imgab\\\\Desktop\\\\website\\\\lukmatic-website\\\\public\\\\logo.png\")",
+      "Bash(mkdir -p /mnt/c/Users/imgab/Desktop/website/lukmatic-website/public)",
+      "Bash(curl -L 'https://lukmatic.co.uk/wp-content/uploads/2024/01/Lukmatic-new-150x140.png' -o '/mnt/c/Users/imgab/Desktop/website/lukmatic-website/public/logo.png')",
+      "Read(//mnt/c/Users/imgab/Desktop/website/lukmatic-website/**)",
+      "Bash(powershell.exe *)",
+      "Bash(node -e \"require\\('autoprefixer'\\); console.log\\('autoprefixer OK'\\)\")",
+      "Bash(npm install *)",
+      "Bash(node -e \"require\\('autoprefixer'\\); console.log\\('OK'\\)\")",
+      "Bash(NODE_TLS_REJECT_UNAUTHORIZED=0 npm install --save-dev autoprefixer)",
+      "Bash(node *)",
+      "Bash(curl *)",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(npm list *)",
+      "Bash(git init *)"
+    ]
+  }
+}
