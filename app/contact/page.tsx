@@ -214,13 +214,13 @@ export default function ContactPage() {
               <div className="relative h-56 rounded-xl overflow-hidden shadow-md">
                 <Image
                   src="/plumber-smile.png"
-                  alt="Lucas — LukMaTic lead engineer"
+                  alt="Mike — LukMaTic lead engineer"
                   fill
                   className="object-cover object-top"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-black/70 via-transparent to-transparent" />
                 <div className="absolute bottom-0 left-0 p-4">
-                  <p className="font-heading font-bold text-white text-sm">Lucas</p>
+                  <p className="font-heading font-bold text-white text-sm">Mike</p>
                   <p className="font-body text-brand-orange text-xs font-semibold">Lead Engineer &amp; Founder</p>
                 </div>
               </div>

@@ -93,7 +93,7 @@ export const TESTIMONIALS = [
   {
     name: "Sarah M.",
     location: "Hatfield",
-    text: "LukMaTic fitted a new combi boiler for us and the service was outstanding. Lucas was professional, clean and tidy, and explained everything clearly. Highly recommended!",
+    text: "LukMaTic fitted a new combi boiler for us and the service was outstanding. Mike was professional, clean and tidy, and explained everything clearly. Highly recommended!",
     rating: 5,
   },
   {
