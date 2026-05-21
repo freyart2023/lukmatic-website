@@ -204,7 +204,7 @@ export default function AboutPage() {
                 is known for across Hatfield and Hertfordshire.
               </p>
               <div className="flex items-center gap-3 bg-yellow-50 border border-yellow-200 rounded-xl p-4">
-                <Image src="/gas-safe.jpg" alt="Gas Safe Registered" width={80} height={80} className="object-contain" />
+                <Image src="/gas-safe.png" alt="Gas Safe Register" width={150} height={150} className="object-contain rounded-xl overflow-hidden" />
                 <div>
                   <p className="font-bold text-gray-900">Gas Safe Registered</p>
                   <p className="text-sm text-gray-600">All our engineers are fully certified</p>
@@ -244,7 +244,7 @@ export default function AboutPage() {
             </div>
             <div className="bg-brand-black rounded-xl p-10 text-white text-center">
               <div className="flex justify-center mb-6">
-                <Image src="/gas-safe.jpg" alt="Gas Safe Registered" width={120} height={120} className="object-contain" />
+                <Image src="/gas-safe.png" alt="Gas Safe Register" width={150} height={150} className="object-contain rounded-xl overflow-hidden" />
               </div>
               <h3 className="font-heading font-black text-2xl mb-2">Gas Safe Registered</h3>
               <p className="font-body text-gray-400 text-sm mb-6 leading-relaxed">
@@ -252,7 +252,7 @@ export default function AboutPage() {
                 legally qualified to carry out gas work safely.
               </p>
               <div className="flex items-center gap-3 bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-left">
-                <Image src="/gas-safe.jpg" alt="Gas Safe Registered" width={80} height={80} className="object-contain" />
+                <Image src="/gas-safe.png" alt="Gas Safe Register" width={150} height={150} className="object-contain rounded-xl overflow-hidden" />
                 <div>
                   <p className="font-bold text-gray-900">Gas Safe Registered</p>
                   <p className="text-sm text-gray-600">All our engineers are fully certified</p>

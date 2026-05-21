@@ -110,7 +110,7 @@ export default function ServicesPage() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
             <div className="flex items-center gap-4">
-              <Image src="/gas-safe.jpg" alt="Gas Safe Registered" width={100} height={100} className="object-contain" />
+              <Image src="/gas-safe.png" alt="Gas Safe Register" width={130} height={130} className="object-contain rounded-xl overflow-hidden" />
               <div>
                 <p className="font-heading font-bold text-brand-black text-lg">Gas Safe Registered</p>
                 <p className="font-body text-gray-600 text-sm">All engineers fully certified &amp; insured</p>

@@ -18,7 +18,7 @@ export default function Footer() {
               registered engineers delivering quality workmanship since 2014.
             </p>
             <div className="flex items-center gap-3 mt-4 bg-white/5 rounded-lg p-3 w-fit mx-auto sm:mx-0">
-              <Image src="/gas-safe.jpg" alt="Gas Safe Registered" width={60} height={60} className="object-contain" />
+              <Image src="/gas-safe.png" alt="Gas Safe Register" width={80} height={80} className="object-contain rounded-xl overflow-hidden" />
               <div>
                 <p className="font-heading font-bold text-white text-xs uppercase tracking-wide">Gas Safe</p>
                 <p className="font-body text-gray-400 text-xs">Registered</p>

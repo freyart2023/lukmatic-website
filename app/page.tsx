@@ -95,7 +95,7 @@ export default function HomePage() {
 
             <div className="flex flex-wrap gap-3 items-center">
               <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-lg px-3 py-2">
-                <Image src="/gas-safe.jpg" alt="Gas Safe Registered" width={40} height={40} className="object-contain" />
+                <Image src="/gas-safe.png" alt="Gas Safe Register" width={80} height={80} className="object-contain rounded-xl overflow-hidden" />
                 <span className="font-body text-white text-xs sm:text-sm font-semibold">Gas Safe Registered</span>
               </div>
               {[
@@ -224,7 +224,7 @@ export default function HomePage() {
                 </Link>
               </div>
               <div className="flex items-center gap-3 bg-yellow-50 border border-yellow-200 rounded-xl p-4 max-w-xs">
-                <Image src="/gas-safe.jpg" alt="Gas Safe Registered" width={60} height={60} className="object-contain" />
+                <Image src="/gas-safe.png" alt="Gas Safe Register" width={130} height={130} className="object-contain rounded-xl overflow-hidden" />
                 <div>
                   <p className="font-bold text-gray-900 text-sm">Gas Safe Registered</p>
                   <p className="text-xs text-gray-600">All our engineers are fully certified</p>
