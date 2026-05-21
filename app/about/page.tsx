@@ -60,15 +60,15 @@ export default function AboutPage() {
             <p className="font-body text-brand-orange font-semibold text-sm uppercase tracking-widest mb-2">
               Who We Are
             </p>
-            <h1 className="font-heading font-black text-4xl md:text-5xl text-white">About LukMaTic</h1>
+            <h1 className="font-heading font-black text-3xl md:text-5xl text-white">About LukMaTic</h1>
           </motion.div>
         </div>
       </section>
 
       {/* Story */}
-      <section className="py-20 bg-white">
+      <section className="py-12 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -111,7 +111,7 @@ export default function AboutPage() {
               transition={{ duration: 0.6 }}
               className="relative"
             >
-              <div className="relative h-[460px] rounded-lg overflow-hidden shadow-2xl">
+              <div className="relative h-64 sm:h-80 md:h-[460px] rounded-lg overflow-hidden shadow-2xl">
                 <Image
                   src="/plumber-pipes.png"
                   alt="LukMaTic plumber working on pipes"
@@ -119,9 +119,9 @@ export default function AboutPage() {
                   className="object-cover"
                 />
               </div>
-              <div className="absolute -bottom-5 -right-5 bg-brand-orange text-white p-5 rounded-lg shadow-xl">
-                <div className="font-heading font-black text-3xl">500+</div>
-                <div className="font-body text-sm font-semibold">Projects Completed</div>
+              <div className="hidden sm:block absolute -bottom-5 -right-5 bg-brand-orange text-white p-4 rounded-lg shadow-xl">
+                <div className="font-heading font-black text-2xl">500+</div>
+                <div className="font-body text-xs font-semibold">Projects Completed</div>
               </div>
             </motion.div>
           </div>
@@ -167,7 +167,7 @@ export default function AboutPage() {
               transition={{ duration: 0.6 }}
               className="relative"
             >
-              <div className="relative h-[440px] rounded-lg overflow-hidden shadow-2xl">
+              <div className="relative h-64 sm:h-80 md:h-[440px] rounded-lg overflow-hidden shadow-2xl">
                 <Image
                   src="/plumber-smile.png"
                   alt="Mike — LukMaTic lead engineer"
@@ -175,9 +175,9 @@ export default function AboutPage() {
                   className="object-cover object-top"
                 />
               </div>
-              <div className="absolute -bottom-5 -left-5 bg-brand-orange text-white p-5 rounded-lg shadow-xl">
-                <div className="font-heading font-black text-3xl">10+</div>
-                <div className="font-body text-sm font-semibold">Years Experience</div>
+              <div className="hidden sm:block absolute -bottom-5 -left-5 bg-brand-orange text-white p-4 rounded-lg shadow-xl">
+                <div className="font-heading font-black text-2xl">10+</div>
+                <div className="font-body text-xs font-semibold">Years Experience</div>
               </div>
             </motion.div>
             <motion.div

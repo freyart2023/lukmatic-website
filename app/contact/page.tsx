@@ -43,21 +43,21 @@ export default function ContactPage() {
           transition={{ duration: 0.5 }}
           className="relative z-10 text-center text-white px-4"
         >
-          <h1 className="font-heading font-black text-5xl">Contact Us</h1>
-          <p className="text-xl mt-2 text-gray-200">Get a free no-obligation quote today</p>
+          <h1 className="font-heading font-black text-3xl md:text-5xl">Contact Us</h1>
+          <p className="text-base md:text-xl mt-2 text-gray-200">Get a free no-obligation quote today</p>
         </motion.div>
       </section>
 
       {/* Main content */}
-      <section className="py-20 bg-[#F5F5F5]">
+      <section className="py-10 md:py-20 bg-[#F5F5F5]">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid lg:grid-cols-5 gap-12">
+          <div className="grid lg:grid-cols-5 gap-8 lg:gap-12">
             {/* Form — spans 3 cols */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
-              className="lg:col-span-3 bg-white rounded-xl shadow-md p-8"
+              className="lg:col-span-3 bg-white rounded-xl shadow-md p-5 sm:p-8"
             >
               <h2 className="font-heading font-black text-2xl text-brand-black mb-2">
                 Request a Free Quote

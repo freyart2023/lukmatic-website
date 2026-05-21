@@ -38,7 +38,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased bg-white">
         <Header />
-        <main className="pt-[96px] lg:pt-[108px]">{children}</main>
+        <main className="pt-[82px] sm:pt-[90px] lg:pt-[108px]">{children}</main>
         <Footer />
         <TawkChat />
       </body>

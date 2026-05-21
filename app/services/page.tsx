@@ -26,14 +26,14 @@ export default function ServicesPage() {
           transition={{ duration: 0.5 }}
           className="relative z-10 text-center text-white px-4"
         >
-          <h1 className="font-heading font-black text-5xl">Our Services</h1>
-          <p className="text-xl mt-2 text-gray-200">Professional heating &amp; plumbing solutions</p>
+          <h1 className="font-heading font-black text-3xl md:text-5xl">Our Services</h1>
+          <p className="text-base md:text-xl mt-2 text-gray-200">Professional heating &amp; plumbing solutions</p>
         </motion.div>
       </section>
 
       {/* Intro */}
-      <section className="py-14 bg-white">
-        <div className="max-w-7xl mx-auto px-4 text-center max-w-3xl mx-auto">
+      <section className="py-10 md:py-14 bg-white">
+        <div className="max-w-7xl mx-auto px-4 text-center">
           <h2 className="section-title">
             Full-Service Heating &amp; Plumbing in{" "}
             <span className="text-brand-orange">Hertfordshire</span>
@@ -56,7 +56,7 @@ export default function ServicesPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className={`grid lg:grid-cols-2 gap-12 items-center py-16 border-b border-gray-200 ${
+            className={`grid lg:grid-cols-2 gap-8 lg:gap-12 items-center py-10 lg:py-16 border-b border-gray-200 ${
               i % 2 === 1 ? "lg:flex-row-reverse" : ""
             }`}
           >
@@ -92,7 +92,7 @@ export default function ServicesPage() {
                 </a>
               </div>
             </div>
-            <div className={`relative h-80 lg:h-[440px] rounded-lg overflow-hidden shadow-xl ${i % 2 === 1 ? "lg:order-1" : ""}`}>
+            <div className={`relative h-56 sm:h-72 lg:h-[440px] rounded-lg overflow-hidden shadow-xl ${i % 2 === 1 ? "lg:order-1" : ""}`}>
               <Image
                 src={service.image}
                 alt={service.title}

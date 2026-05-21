@@ -67,7 +67,7 @@ export default function HomePage() {
               <Shield size={14} />
               Gas Safe Registered — Hatfield &amp; Hertfordshire
             </div>
-            <h1 className="font-heading font-black text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-6">
+            <h1 className="font-heading font-black text-2xl sm:text-3xl md:text-5xl lg:text-6xl text-white leading-tight mb-6">
               Hatfield&apos;s Most Trusted{" "}
               <span className="text-brand-orange">Heating &amp; Plumbing</span>{" "}
               Specialists
@@ -93,20 +93,17 @@ export default function HomePage() {
               </a>
             </div>
 
-            <div className="flex flex-wrap gap-4 items-center">
+            <div className="flex flex-wrap gap-3 items-center">
               <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-lg px-3 py-2">
-                <Image src="/gas-safe.jpg" alt="Gas Safe Registered" width={60} height={60} className="object-contain" />
-                <span className="font-body text-white text-sm font-semibold">Gas Safe Registered</span>
+                <Image src="/gas-safe.jpg" alt="Gas Safe Registered" width={40} height={40} className="object-contain" />
+                <span className="font-body text-white text-xs sm:text-sm font-semibold">Gas Safe Registered</span>
               </div>
               {[
-                { icon: <Clock size={18} />, text: "24/7 Emergency" },
-                { icon: <Award size={18} />, text: "10+ Years Experience" },
-                { icon: <Users size={18} />, text: "500+ Happy Customers" },
+                { icon: <Clock size={16} />, text: "24/7 Emergency" },
+                { icon: <Award size={16} />, text: "10+ Years" },
+                { icon: <Users size={16} />, text: "500+ Customers" },
               ].map((badge) => (
-                <div
-                  key={badge.text}
-                  className="flex items-center gap-2 text-white/80 font-body text-sm"
-                >
+                <div key={badge.text} className="flex items-center gap-1.5 text-white/80 font-body text-xs sm:text-sm">
                   <span className="text-brand-orange">{badge.icon}</span>
                   {badge.text}
                 </div>
@@ -242,7 +239,7 @@ export default function HomePage() {
               transition={{ duration: 0.6 }}
               className="relative"
             >
-              <div className="relative h-[480px] rounded-lg overflow-hidden shadow-2xl">
+              <div className="relative h-64 sm:h-80 md:h-[480px] rounded-lg overflow-hidden shadow-2xl">
                 <Image
                   src="/plumber-pipes.png"
                   alt="LukMaTic plumber at work"
@@ -250,11 +247,11 @@ export default function HomePage() {
                   className="object-cover"
                 />
               </div>
-              <div className="absolute -bottom-5 -left-5 bg-brand-orange text-white p-5 rounded-lg shadow-xl">
-                <div className="font-heading font-black text-3xl">10+</div>
-                <div className="font-body text-sm font-semibold">Years Experience</div>
+              <div className="hidden sm:block absolute -bottom-5 -left-5 bg-brand-orange text-white p-4 rounded-lg shadow-xl">
+                <div className="font-heading font-black text-2xl">10+</div>
+                <div className="font-body text-xs font-semibold">Years Experience</div>
               </div>
-              <div className="absolute top-5 -right-5 bg-white text-brand-black p-4 rounded-lg shadow-xl border-l-4 border-brand-orange">
+              <div className="hidden sm:block absolute top-5 -right-5 bg-white text-brand-black p-3 rounded-lg shadow-xl border-l-4 border-brand-orange">
                 <div className="font-heading font-bold text-sm">Gas Safe</div>
                 <div className="font-body text-xs text-gray-600">Registered</div>
               </div>

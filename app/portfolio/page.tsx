@@ -29,13 +29,13 @@ export default function PortfolioPage() {
           transition={{ duration: 0.5 }}
           className="relative z-10 text-center text-white px-4"
         >
-          <h1 className="font-heading font-black text-5xl">Our Portfolio</h1>
-          <p className="text-xl mt-2 text-gray-200">Hundreds of successful projects across Hertfordshire</p>
+          <h1 className="font-heading font-black text-3xl md:text-5xl">Our Portfolio</h1>
+          <p className="text-base md:text-xl mt-2 text-gray-200">Hundreds of successful projects across Hertfordshire</p>
         </motion.div>
       </section>
 
       {/* Filter + Grid */}
-      <section className="py-20 bg-white">
+      <section className="py-12 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-10">
             <h2 className="section-title">Completed Projects</h2>
