@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import TawkChat from "@/components/TawkChat";
+import WhatsAppButton from "@/components/ui/WhatsAppButton";
 
 export const metadata: Metadata = {
   title: {
@@ -41,6 +42,7 @@ export default function RootLayout({
         <main className="pt-[82px] sm:pt-[90px] lg:pt-[108px]">{children}</main>
         <Footer />
         <TawkChat />
+        <WhatsAppButton />
       </body>
     </html>
   );

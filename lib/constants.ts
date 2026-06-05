@@ -1,6 +1,7 @@
 export const CONTACT = {
   phone: "07427 556589",
   phoneTel: "07427556589",
+  whatsapp: "https://wa.me/447427556589?text=Hi%2C%20I%27d%20like%20a%20free%20quote%20from%20LukMaTic",
   email: "info@lukmatic.co.uk",
   address: "Hatfield, Hertfordshire",
   hours: {
