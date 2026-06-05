@@ -6,7 +6,7 @@ import Link from "next/link";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import {
   Phone, CheckCircle, Star, Flame, Wrench, Layers, Thermometer,
-  Shield, Award, Clock, Users, ArrowUpRight, ArrowRight,
+  Shield, Award, Clock, Users, ArrowUpRight,
 } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import { CONTACT, SERVICES, STATS, TESTIMONIALS, PORTFOLIO } from "@/lib/constants";
