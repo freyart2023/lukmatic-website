@@ -471,10 +471,9 @@ export default function HomePage() {
               <motion.div
                 animate={reduce ? {} : { y: [0, -5, 0] }}
                 transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
-                className="hidden sm:block absolute top-6 -left-6 bg-white border border-gray-100 text-[#0A0A0A] px-5 py-3.5 rounded-2xl shadow-xl"
+                className="hidden sm:block absolute top-6 -left-6 bg-white border border-gray-100 p-3 rounded-2xl shadow-xl"
               >
-                <div className="font-heading font-bold text-sm">Gas Safe</div>
-                <div className="font-body text-xs text-gray-400">Registered</div>
+                <Image src="/gas-safe.png" alt="Gas Safe Register" width={56} height={56} className="object-contain" unoptimized />
               </motion.div>
             </motion.div>
 

@@ -176,10 +176,6 @@ export default function ServicesPage() {
               className="flex items-center gap-4"
             >
               <Image src="/gas-safe.png" alt="Gas Safe Register" width={130} height={130} className="object-contain rounded-xl overflow-hidden" />
-              <div>
-                <p className="font-heading font-bold text-brand-black text-lg">Gas Safe Registered</p>
-                <p className="font-body text-gray-600 text-sm">All engineers fully certified &amp; insured</p>
-              </div>
             </motion.div>
             <div className="hidden md:block w-px h-16 bg-gray-300" />
             <motion.div

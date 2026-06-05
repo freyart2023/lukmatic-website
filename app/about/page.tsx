@@ -232,12 +232,8 @@ export default function AboutPage() {
                 Mike personally oversees every job to ensure it meets the high standards LukMaTic
                 is known for across Hatfield and Hertfordshire.
               </p>
-              <div className="flex items-center gap-3 bg-yellow-50 border border-yellow-200 rounded-xl p-4">
-                <Image src="/gas-safe.png" alt="Gas Safe Register" width={150} height={150} className="object-contain rounded-xl overflow-hidden" />
-                <div>
-                  <p className="font-bold text-gray-900">Gas Safe Registered</p>
-                  <p className="text-sm text-gray-600">All our engineers are fully certified</p>
-                </div>
+              <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 w-fit">
+                <Image src="/gas-safe.png" alt="Gas Safe Register" width={100} height={100} className="object-contain rounded-xl overflow-hidden" />
               </div>
             </motion.div>
           </div>
@@ -316,12 +312,8 @@ export default function AboutPage() {
                 Every engineer working in your home is registered with the Gas Safe Register and
                 legally qualified to carry out gas work safely.
               </p>
-              <div className="flex items-center gap-3 bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-left">
-                <Image src="/gas-safe.png" alt="Gas Safe Register" width={150} height={150} className="object-contain rounded-xl overflow-hidden" />
-                <div>
-                  <p className="font-bold text-gray-900">Gas Safe Registered</p>
-                  <p className="text-sm text-gray-600">All our engineers are fully certified</p>
-                </div>
+              <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 w-fit mx-auto">
+                <Image src="/gas-safe.png" alt="Gas Safe Register" width={100} height={100} className="object-contain rounded-xl overflow-hidden" />
               </div>
               <div className="border-t border-gray-700 pt-6 mt-6">
                 <p className="font-body text-gray-400 text-xs mb-1">
