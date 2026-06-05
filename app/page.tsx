@@ -6,8 +6,9 @@ import Link from "next/link";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import {
   Phone, CheckCircle, Star, Flame, Wrench, Layers, Thermometer,
-  Shield, Award, Clock, Users, ArrowUpRight,
+  Shield, Award, Clock, Users, ArrowUpRight, ArrowRight,
 } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 import { CONTACT, SERVICES, STATS, TESTIMONIALS, PORTFOLIO } from "@/lib/constants";
 import { motionTokens } from "@/lib/motionTokens";
 
@@ -141,6 +142,7 @@ export default function HomePage() {
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const bgY = useTransform(scrollYProgress, [0, 1], ["0px", reduce ? "0px" : "-80px"]);
   const bgOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.6]);
+  const [activeService, setActiveService] = useState(0);
 
   return (
     <>
@@ -271,12 +273,13 @@ export default function HomePage() {
       {/* ── SERVICES ─────────────────────────────────────── */}
       <section className="bg-[#F5F5F5] py-24 md:py-32">
         <div className="max-w-7xl mx-auto px-6">
+          {/* Section header */}
           <motion.div
             initial={{ opacity: 0, y: reduce ? 0 : 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: motionTokens.duration.slow, ease: motionTokens.easing.smooth }}
-            className="mb-16"
+            className="mb-14"
           >
             <span className="font-body text-gray-400 text-xs uppercase tracking-[0.2em] block mb-4">What We Do</span>
             <h2 className="section-title max-w-2xl">
@@ -286,48 +289,146 @@ export default function HomePage() {
             </h2>
           </motion.div>
 
-          <div className="space-y-0">
+          {/* Desktop: two-column interactive selector */}
+          <div className="hidden lg:grid lg:grid-cols-[1fr_1fr] lg:gap-16 lg:items-start">
+            {/* Left: numbered list */}
+            <div>
+              {SERVICES.map((service, i) => (
+                <motion.div
+                  key={service.id}
+                  id={service.id}
+                  initial={{ opacity: 0, x: reduce ? 0 : -16 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.08, ease: motionTokens.easing.smooth }}
+                  className="relative border-b border-[#E0E0E0] first:border-t cursor-pointer"
+                  onMouseEnter={() => setActiveService(i)}
+                  onClick={() => setActiveService(i)}
+                >
+                  <AnimatePresence>
+                    {activeService === i && (
+                      <motion.div
+                        layoutId="service-bar"
+                        className="absolute left-0 top-0 bottom-0 w-[3px] bg-brand-orange rounded-full"
+                        initial={{ scaleY: 0 }}
+                        animate={{ scaleY: 1 }}
+                        exit={{ scaleY: 0 }}
+                        transition={{ duration: 0.22 }}
+                      />
+                    )}
+                  </AnimatePresence>
+
+                  <div className={`py-7 pl-6 pr-4 transition-colors duration-200 ${activeService === i ? "bg-white" : "hover:bg-white/60"}`}>
+                    <div className="flex items-start gap-5">
+                      <span className={`font-heading font-black text-3xl leading-none tabular-nums shrink-0 mt-0.5 transition-colors duration-300 ${activeService === i ? "text-brand-orange" : "text-[#D0D0D0]"}`}>
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <h3 className={`font-heading font-black text-xl transition-colors duration-300 ${activeService === i ? "text-brand-orange" : "text-[#0A0A0A]"}`}>
+                            {service.title}
+                          </h3>
+                          <motion.span
+                            animate={{ rotate: activeService === i ? 45 : 0 }}
+                            transition={{ duration: 0.22 }}
+                            className={`ml-4 shrink-0 transition-colors duration-300 ${activeService === i ? "text-brand-orange" : "text-[#C0C0C0]"}`}
+                          >
+                            <ArrowUpRight size={18} />
+                          </motion.span>
+                        </div>
+                        <AnimatePresence initial={false}>
+                          {activeService === i && (
+                            <motion.p
+                              initial={{ height: 0, opacity: 0, marginTop: 0 }}
+                              animate={{ height: "auto", opacity: 1, marginTop: 10 }}
+                              exit={{ height: 0, opacity: 0, marginTop: 0 }}
+                              transition={{ duration: 0.3, ease: motionTokens.easing.smooth }}
+                              className="font-body text-gray-500 text-sm leading-relaxed overflow-hidden"
+                            >
+                              {service.shortDesc}
+                            </motion.p>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Right: sticky image + detail panel */}
+            <div className="sticky top-28">
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#1A1A1A] shadow-2xl">
+                <AnimatePresence mode="sync">
+                  {SERVICES.map((service, i) =>
+                    activeService === i ? (
+                      <motion.div
+                        key={service.id}
+                        className="absolute inset-0"
+                        initial={{ opacity: 0, scale: reduce ? 1 : 1.05 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.5, ease: motionTokens.easing.smooth }}
+                      >
+                        <Image
+                          src={service.image}
+                          alt={service.title}
+                          fill
+                          className="object-cover"
+                          unoptimized
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/92 via-[#0A0A0A]/25 to-transparent" />
+                        <motion.div
+                          initial={{ opacity: 0, y: reduce ? 0 : 14 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.4, delay: 0.2, ease: motionTokens.easing.smooth }}
+                          className="absolute bottom-0 left-0 right-0 p-8"
+                        >
+                          <div className="flex items-center gap-2.5 mb-4">
+                            <span className="text-brand-orange">{serviceIcons[service.icon]}</span>
+                            <span className="font-heading font-black text-white text-lg">{service.title}</span>
+                          </div>
+                          <div className="space-y-2.5 mb-6">
+                            {service.features.slice(0, 3).map((f) => (
+                              <div key={f} className="flex items-center gap-2.5 font-body text-white/75 text-sm">
+                                <CheckCircle size={13} className="text-brand-orange shrink-0" />
+                                {f}
+                              </div>
+                            ))}
+                          </div>
+                          <Link
+                            href={`/services#${service.id}`}
+                            className="inline-flex items-center gap-2 bg-brand-orange text-white font-heading font-bold px-5 py-2.5 rounded-full text-xs uppercase tracking-wide hover:bg-orange-600 transition-colors"
+                          >
+                            Learn More <ArrowUpRight size={13} />
+                          </Link>
+                        </motion.div>
+                      </motion.div>
+                    ) : null
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile: 2×2 image card grid */}
+          <div className="grid grid-cols-2 gap-3 lg:hidden">
             {SERVICES.map((service, i) => (
               <motion.div
                 key={service.id}
-                id={service.id}
-                initial={{ opacity: 0, y: reduce ? 0 : 30 }}
+                initial={{ opacity: 0, y: reduce ? 0 : 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0, ease: motionTokens.easing.smooth }}
-                className="group grid lg:grid-cols-[1fr_auto] gap-6 items-center py-8 border-b border-[#E0E0E0] first:border-t cursor-pointer"
+                transition={{ duration: 0.5, delay: i * 0.08, ease: motionTokens.easing.smooth }}
               >
-                <div className="flex items-start gap-6 lg:gap-10">
-                  <span className="font-heading font-black text-[#D0D0D0] text-4xl md:text-5xl leading-none tabular-nums shrink-0 mt-1">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="text-brand-orange">{serviceIcons[service.icon]}</span>
-                      <h3 className="font-heading font-black text-2xl md:text-3xl text-[#0A0A0A] group-hover:text-brand-orange transition-colors duration-300">
-                        {service.title}
-                      </h3>
-                    </div>
-                    <p className="font-body text-gray-500 text-sm leading-relaxed max-w-xl">
-                      {service.shortDesc}
-                    </p>
+                <Link href={`/services#${service.id}`} className="block relative aspect-square rounded-xl overflow-hidden bg-[#1A1A1A]">
+                  <Image src={service.image} alt={service.title} fill className="object-cover" unoptimized />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/88 via-transparent to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <span className="font-heading font-black text-[#D0D0D0]/40 text-2xl block leading-none">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="font-heading font-bold text-white text-sm leading-tight block mt-0.5">{service.title}</span>
                   </div>
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <motion.div
-                    whileHover={{ scale: reduce ? 1 : 1.04 }}
-                    whileTap={{ scale: reduce ? 1 : 0.97 }}
-                    transition={{ duration: 0.14, ease: motionTokens.easing.sharp }}
-                  >
-                    <Link
-                      href={`/services#${service.id}`}
-                      className="inline-flex items-center gap-2 border border-[#0A0A0A] text-[#0A0A0A] font-heading font-bold px-6 py-3 rounded-full text-xs uppercase tracking-wide hover:bg-[#0A0A0A] hover:text-white transition-all duration-200 whitespace-nowrap"
-                    >
-                      Learn More <ArrowUpRight size={14} />
-                    </Link>
-                  </motion.div>
-                </div>
+                </Link>
               </motion.div>
             ))}
           </div>
