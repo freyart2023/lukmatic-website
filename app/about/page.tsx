@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { CheckCircle, Shield, Award, Users, Clock, Phone } from "lucide-react";
 import { CONTACT } from "@/lib/constants";
+import { motionTokens } from "@/lib/motionTokens";
 
 const values = [
   {
@@ -39,10 +40,12 @@ const certifications = [
 ];
 
 export default function AboutPage() {
+  const reduce = useReducedMotion();
+
   return (
     <>
       {/* Hero */}
-      <section className="relative h-64 md:h-80 flex items-center">
+      <section className="relative h-64 md:h-80 flex items-center overflow-hidden">
         <Image
           src="/van.png"
           alt="LukMaTic branded van — professional heating and plumbing"
@@ -53,9 +56,9 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-brand-black/50" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 w-full">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: reduce ? 0 : 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.5, ease: motionTokens.easing.smooth }}
           >
             <p className="font-body text-brand-orange font-semibold text-sm uppercase tracking-widest mb-2">
               Who We Are
@@ -70,10 +73,10 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
+              initial={{ opacity: 0, x: reduce ? 0 : -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: motionTokens.duration.slow, ease: motionTokens.easing.smooth }}
             >
               <h2 className="section-title">
                 Hatfield&apos;s Trusted Heating &amp;{" "}
@@ -94,21 +97,26 @@ export default function AboutPage() {
                 repeat customers, which is why we go above and beyond to ensure every customer is
                 completely satisfied.
               </p>
-              <div className="flex gap-4">
+              <motion.div
+                whileHover={{ scale: reduce ? 1 : 1.04 }}
+                whileTap={{ scale: reduce ? 1 : 0.97 }}
+                transition={{ duration: 0.14, ease: motionTokens.easing.sharp }}
+                className="inline-block"
+              >
                 <Link
                   href="/contact"
-                  className="bg-brand-orange text-white font-heading font-bold px-6 py-3 rounded text-sm uppercase tracking-wide hover:bg-orange-600 transition-colors"
+                  className="bg-brand-orange text-white font-heading font-bold px-6 py-3 rounded text-sm uppercase tracking-wide hover:bg-orange-600 transition-colors inline-block"
                 >
                   Get a Free Quote
                 </Link>
-              </div>
+              </motion.div>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
+              initial={{ opacity: 0, x: reduce ? 0 : 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: motionTokens.duration.slow, ease: motionTokens.easing.smooth }}
               className="relative"
             >
               <div className="relative h-64 sm:h-80 md:h-[460px] rounded-lg overflow-hidden shadow-2xl">
@@ -119,10 +127,14 @@ export default function AboutPage() {
                   className="object-cover"
                 />
               </div>
-              <div className="hidden sm:block absolute -bottom-5 -right-5 bg-brand-orange text-white p-4 rounded-lg shadow-xl">
+              <motion.div
+                animate={reduce ? {} : { y: [0, -7, 0] }}
+                transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+                className="hidden sm:block absolute -bottom-5 -right-5 bg-brand-orange text-white p-4 rounded-lg shadow-xl"
+              >
                 <div className="font-heading font-black text-2xl">500+</div>
                 <div className="font-body text-xs font-semibold">Projects Completed</div>
-              </div>
+              </motion.div>
             </motion.div>
           </div>
         </div>
@@ -131,23 +143,36 @@ export default function AboutPage() {
       {/* Values */}
       <section className="py-20 bg-[#F5F5F5]">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: reduce ? 0 : 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: motionTokens.duration.slow, ease: motionTokens.easing.smooth }}
+            className="text-center mb-12"
+          >
             <h2 className="section-title">Our Values</h2>
             <p className="section-subtitle max-w-xl mx-auto">
               Everything we do is guided by four core principles.
             </p>
-          </div>
+          </motion.div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((v, i) => (
               <motion.div
                 key={v.title}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: reduce ? 0 : 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
+                whileHover={reduce ? {} : { y: -6, boxShadow: "0 16px 40px -8px rgba(0,0,0,0.12)" }}
+                transition={{ duration: 0.45, delay: i * 0.1, ease: motionTokens.easing.smooth }}
                 className="bg-white rounded-lg p-7 shadow-sm border-t-4 border-brand-orange text-center"
               >
-                <div className="flex justify-center mb-4">{v.icon}</div>
+                <motion.div
+                  whileHover={reduce ? {} : { scale: 1.15, rotate: -6 }}
+                  transition={{ duration: 0.2, ease: motionTokens.easing.smooth }}
+                  className="flex justify-center mb-4"
+                >
+                  {v.icon}
+                </motion.div>
                 <h3 className="font-heading font-bold text-lg text-brand-black mb-2">{v.title}</h3>
                 <p className="font-body text-gray-600 text-sm leading-relaxed">{v.desc}</p>
               </motion.div>
@@ -161,10 +186,10 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
+              initial={{ opacity: 0, x: reduce ? 0 : -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: motionTokens.duration.slow, ease: motionTokens.easing.smooth }}
               className="relative"
             >
               <div className="relative h-64 sm:h-80 md:h-[440px] rounded-lg overflow-hidden shadow-2xl">
@@ -175,16 +200,20 @@ export default function AboutPage() {
                   className="object-cover object-top"
                 />
               </div>
-              <div className="hidden sm:block absolute -bottom-5 -left-5 bg-brand-orange text-white p-4 rounded-lg shadow-xl">
+              <motion.div
+                animate={reduce ? {} : { y: [0, -6, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
+                className="hidden sm:block absolute -bottom-5 -left-5 bg-brand-orange text-white p-4 rounded-lg shadow-xl"
+              >
                 <div className="font-heading font-black text-2xl">10+</div>
                 <div className="font-body text-xs font-semibold">Years Experience</div>
-              </div>
+              </motion.div>
             </motion.div>
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
+              initial={{ opacity: 0, x: reduce ? 0 : 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: motionTokens.duration.slow, ease: motionTokens.easing.smooth }}
             >
               <p className="font-body text-brand-orange font-semibold text-sm uppercase tracking-widest mb-3">
                 The Person Behind the Work
@@ -219,7 +248,12 @@ export default function AboutPage() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
+            <motion.div
+              initial={{ opacity: 0, x: reduce ? 0 : -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: motionTokens.duration.slow, ease: motionTokens.easing.smooth }}
+            >
               <h2 className="section-title">
                 Gas Safe &amp; <span className="text-brand-orange">Fully Certified</span>
               </h2>
@@ -233,16 +267,47 @@ export default function AboutPage() {
                 professional development to stay up to date with the latest heating technologies
                 and regulations.
               </p>
-              <ul className="space-y-3">
+              <motion.ul
+                className="space-y-3"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={{
+                  hidden: {},
+                  visible: {
+                    transition: {
+                      staggerChildren: reduce ? 0 : 0.07,
+                      delayChildren: reduce ? 0 : 0.1,
+                    },
+                  },
+                }}
+              >
                 {certifications.map((cert) => (
-                  <li key={cert} className="flex items-center gap-3 font-body text-gray-700 text-sm">
+                  <motion.li
+                    key={cert}
+                    variants={{
+                      hidden: { opacity: 0, x: reduce ? 0 : -16 },
+                      visible: {
+                        opacity: 1,
+                        x: 0,
+                        transition: { duration: 0.35, ease: motionTokens.easing.smooth },
+                      },
+                    }}
+                    className="flex items-center gap-3 font-body text-gray-700 text-sm"
+                  >
                     <CheckCircle size={18} className="text-brand-orange shrink-0" />
                     {cert}
-                  </li>
+                  </motion.li>
                 ))}
-              </ul>
-            </div>
-            <div className="bg-brand-black rounded-xl p-10 text-white text-center">
+              </motion.ul>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: reduce ? 0 : 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: motionTokens.duration.slow, ease: motionTokens.easing.smooth }}
+              className="bg-brand-black rounded-xl p-10 text-white text-center"
+            >
               <div className="flex justify-center mb-6">
                 <Image src="/gas-safe.png" alt="Gas Safe Register" width={150} height={150} className="object-contain rounded-xl overflow-hidden" />
               </div>
@@ -266,14 +331,20 @@ export default function AboutPage() {
                   gassaferegister.co.uk
                 </p>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* CTA */}
       <section className="bg-brand-orange py-16">
-        <div className="max-w-7xl mx-auto px-4 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: reduce ? 0 : 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: motionTokens.duration.slow, ease: motionTokens.easing.smooth }}
+          className="max-w-7xl mx-auto px-4 text-center"
+        >
           <h2 className="font-heading font-black text-3xl md:text-4xl text-white mb-4">
             Work With Hatfield&apos;s Best
           </h2>
@@ -281,21 +352,33 @@ export default function AboutPage() {
             Get in touch today for a free, no-obligation quote from our Gas Safe registered team.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/contact"
-              className="bg-white text-brand-orange font-heading font-bold px-8 py-4 rounded text-base uppercase tracking-wide hover:bg-gray-100 transition-colors"
+            <motion.div
+              whileHover={{ scale: reduce ? 1 : 1.05 }}
+              whileTap={{ scale: reduce ? 1 : 0.96 }}
+              transition={{ duration: 0.14, ease: motionTokens.easing.sharp }}
             >
-              Get a Free Quote
-            </Link>
-            <a
-              href={`tel:${CONTACT.phoneTel}`}
-              className="flex items-center justify-center gap-3 border-2 border-white text-white font-heading font-bold px-8 py-4 rounded text-base uppercase tracking-wide hover:bg-white/10 transition-colors"
+              <Link
+                href="/contact"
+                className="bg-white text-brand-orange font-heading font-bold px-8 py-4 rounded text-base uppercase tracking-wide hover:bg-gray-100 transition-colors inline-block"
+              >
+                Get a Free Quote
+              </Link>
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: reduce ? 1 : 1.05 }}
+              whileTap={{ scale: reduce ? 1 : 0.96 }}
+              transition={{ duration: 0.14, ease: motionTokens.easing.sharp }}
             >
-              <Phone size={20} />
-              {CONTACT.phone}
-            </a>
+              <a
+                href={`tel:${CONTACT.phoneTel}`}
+                className="flex items-center justify-center gap-3 border-2 border-white text-white font-heading font-bold px-8 py-4 rounded text-base uppercase tracking-wide hover:bg-white/10 transition-colors"
+              >
+                <Phone size={20} />
+                {CONTACT.phone}
+              </a>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </section>
     </>
   );
