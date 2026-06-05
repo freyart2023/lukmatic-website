@@ -113,7 +113,7 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-gray-800">
         <div className="max-w-7xl mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm text-gray-500 font-body text-center sm:text-left">
-          <p>&copy; {new Date().getFullYear()} LukMaTic Ltd. All rights reserved.</p>
+          <p>&copy; 2011 LukMaTic Ltd. All rights reserved.</p>
           <p>Hatfield, Hertfordshire | Gas Safe Registered</p>
         </div>
       </div>
