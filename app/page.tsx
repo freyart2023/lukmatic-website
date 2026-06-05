@@ -5,258 +5,328 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import {
-  Phone,
-  CheckCircle,
-  Star,
-  Flame,
-  Wrench,
-  Layers,
-  Thermometer,
-  Shield,
-  Award,
-  Clock,
-  Users,
+  Phone, CheckCircle, Star, Flame, Wrench, Layers, Thermometer,
+  Shield, Award, Clock, Users, ArrowUpRight,
 } from "lucide-react";
 import { CONTACT, SERVICES, STATS, TESTIMONIALS, PORTFOLIO } from "@/lib/constants";
 import { motionTokens } from "@/lib/motionTokens";
 
-const serviceIcons: Record<string, React.ReactNode> = {
-  Flame: <Flame size={32} className="text-brand-orange" />,
-  Wrench: <Wrench size={32} className="text-brand-orange" />,
-  Layers: <Layers size={32} className="text-brand-orange" />,
-  Thermometer: <Thermometer size={32} className="text-brand-orange" />,
-};
+/* ─── Word-mask text animation ──────────────────────────── */
+function SplitText({
+  text,
+  className,
+  delay = 0,
+  viewport = false,
+}: {
+  text: string;
+  className?: string;
+  delay?: number;
+  viewport?: boolean;
+}) {
+  const reduce = useReducedMotion();
+  const words = text.split(" ");
+  const animProps = viewport
+    ? { initial: { y: reduce ? 0 : "105%" }, whileInView: { y: 0 }, viewport: { once: true } }
+    : { initial: { y: reduce ? 0 : "105%" }, animate: { y: 0 } };
 
+  return (
+    <span className={className} role="text" aria-label={text}>
+      {words.map((word, i) => (
+        <span key={i} className="inline-block overflow-hidden align-[-.08em] mr-[0.22em]">
+          <motion.span
+            className="inline-block"
+            {...animProps}
+            transition={{ duration: 0.7, delay: delay + i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {word}
+          </motion.span>
+        </span>
+      ))}
+    </span>
+  );
+}
+
+/* ─── Clip-path image reveal ────────────────────────────── */
+function RevealImage({
+  src, alt, fill = true, className = "", priority = false,
+}: {
+  src: string; alt: string; fill?: boolean; className?: string; priority?: boolean;
+}) {
+  const reduce = useReducedMotion();
+  return (
+    <motion.div
+      className="absolute inset-0 overflow-hidden"
+      initial={{ clipPath: reduce ? "inset(0% 0 0% 0)" : "inset(100% 0 0% 0)" }}
+      whileInView={{ clipPath: "inset(0% 0 0% 0)" }}
+      viewport={{ once: true, margin: "-8%" }}
+      transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <motion.div
+        className="absolute inset-0"
+        initial={{ scale: reduce ? 1 : 1.08 }}
+        whileInView={{ scale: 1 }}
+        viewport={{ once: true, margin: "-8%" }}
+        transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <Image src={src} alt={alt} fill={fill} className={`object-cover ${className}`} priority={priority} unoptimized />
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ─── Animated stat counter ─────────────────────────────── */
 function AnimatedStat({ value, label, delay = 0 }: { value: string; label: string; delay?: number }) {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
-  const [isInView, setIsInView] = useState(false);
-
-  // Only animate clean "number + optional symbol" values (not "24/7" etc.)
+  const [inView, setInView] = useState(false);
   const match = value.match(/^(\d+)([+%]?)$/);
   const num = match ? parseInt(match[1]) : null;
   const suffix = match ? match[2] : "";
-
   const [display, setDisplay] = useState(0);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setIsInView(true); },
-      { threshold: 0.3 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setInView(true); }, { threshold: 0.3 });
+    obs.observe(el);
+    return () => obs.disconnect();
   }, []);
 
   useEffect(() => {
-    if (!isInView || num === null) return;
+    if (!inView || num === null) return;
     if (reduce) { setDisplay(num); return; }
-    const startTime = Date.now();
-    const duration = 1600;
-    let rafId: number;
-    const frame = () => {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setDisplay(Math.round(eased * num));
-      if (progress < 1) rafId = requestAnimationFrame(frame);
+    const start = Date.now();
+    const dur = 1600;
+    let raf: number;
+    const tick = () => {
+      const t = Math.min((Date.now() - start) / dur, 1);
+      setDisplay(Math.round((1 - Math.pow(1 - t, 3)) * num));
+      if (t < 1) raf = requestAnimationFrame(tick);
     };
-    rafId = requestAnimationFrame(frame);
-    return () => cancelAnimationFrame(rafId);
-  }, [isInView, num, reduce]);
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [inView, num, reduce]);
 
   return (
     <div ref={ref}>
       <motion.div
-        initial={{ opacity: 0, y: reduce ? 0 : 30 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: reduce ? 0 : 30 }}
+        initial={{ opacity: 0, y: reduce ? 0 : 24 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: motionTokens.duration.slow, delay, ease: motionTokens.easing.smooth }}
-        className="text-center px-6 py-4"
+        className="text-center"
       >
-        <div className="font-heading font-black text-4xl md:text-5xl text-brand-orange mb-2">
+        <div className="font-heading font-black text-5xl md:text-6xl text-brand-orange mb-2 tabular-nums">
           {num !== null ? `${display}${suffix}` : value}
         </div>
-        <div className="font-body text-gray-300 text-sm uppercase tracking-widest">{label}</div>
+        <div className="font-body text-gray-400 text-xs uppercase tracking-[0.18em]">{label}</div>
       </motion.div>
     </div>
   );
 }
 
+/* ─── Service icon map ───────────────────────────────────── */
+const serviceIcons: Record<string, React.ReactNode> = {
+  Flame: <Flame size={24} />,
+  Wrench: <Wrench size={24} />,
+  Layers: <Layers size={24} />,
+  Thermometer: <Thermometer size={24} />,
+};
+
+/* ═══════════════════════════════════════════════════════════
+   HOME PAGE
+═══════════════════════════════════════════════════════════ */
 export default function HomePage() {
   const reduce = useReducedMotion();
   const heroRef = useRef<HTMLElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const bgY = useTransform(scrollYProgress, [0, 1], ["0px", reduce ? "0px" : "-80px"]);
-
-  const heroContainer = {
-    hidden: {},
-    visible: {
-      transition: { staggerChildren: reduce ? 0 : 0.1, delayChildren: reduce ? 0 : 0.15 },
-    },
-  };
-  const heroItem = {
-    hidden: { opacity: 0, y: reduce ? 0 : 28 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: motionTokens.easing.smooth } },
-  };
+  const bgOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.6]);
 
   return (
     <>
-      {/* ── HERO ── */}
-      <section ref={heroRef} className="relative min-h-[90vh] flex items-center overflow-hidden">
-        <motion.div className="absolute inset-0" style={{ y: bgY }}>
+      {/* ── HERO ─────────────────────────────────────────── */}
+      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0A0A0A]">
+        <motion.div className="absolute inset-0" style={{ y: bgY, opacity: bgOpacity }}>
           <Image
             src="/boiler-install.png"
-            alt="LukMaTic boiler installation — Hatfield heating specialists"
-            fill
+            alt="LukMaTic boiler installation"
+            fill priority
             className="object-cover object-center scale-[1.15]"
-            priority
           />
+          <div className="absolute inset-0 bg-[#0A0A0A]/75" />
         </motion.div>
-        <div className="absolute inset-0 bg-brand-black/60" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 py-20 w-full">
+        <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
+          {/* Badge */}
           <motion.div
-            variants={heroContainer}
-            initial="hidden"
-            animate="visible"
-            className="max-w-3xl"
+            initial={{ opacity: 0, y: reduce ? 0 : 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: motionTokens.easing.smooth }}
+            className="mb-8"
           >
-            <motion.div variants={heroItem}>
-              <div className="inline-flex items-center gap-2 bg-brand-orange/20 border border-brand-orange/40 text-brand-orange font-body font-semibold text-sm px-4 py-2 rounded-full mb-6">
-                <Shield size={14} />
-                Gas Safe Registered — Hatfield &amp; Hertfordshire
-              </div>
+            <span className="inline-flex items-center gap-2 border border-white/20 text-white/60 text-xs uppercase tracking-[0.18em] px-5 py-2.5 rounded-full">
+              <Shield size={12} className="text-brand-orange" />
+              Gas Safe Registered · Hatfield &amp; Hertfordshire
+            </span>
+          </motion.div>
+
+          {/* Headline — word mask animation */}
+          <h1 className="font-heading font-black leading-[0.95] mb-8">
+            <span className="block text-white text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem]">
+              <SplitText text="Hatfield's Most" delay={0.1} />
+            </span>
+            <span className="block text-brand-orange text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem]">
+              <SplitText text="Trusted Heating" delay={0.3} />
+            </span>
+            <span className="block text-white text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem]">
+              <SplitText text="& Plumbing" delay={0.5} />
+            </span>
+          </h1>
+
+          {/* Subtext */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.8, ease: motionTokens.easing.smooth }}
+            className="font-body text-white/50 text-base md:text-lg max-w-xl mx-auto mb-10 leading-relaxed"
+          >
+            Professional boiler installation, repairs, underfloor heating and radiator
+            services across Hatfield and Hertfordshire. Available 24/7.
+          </motion.p>
+
+          {/* CTA pill buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: reduce ? 0 : 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 1.0, ease: motionTokens.easing.smooth }}
+            className="flex flex-col sm:flex-row gap-4 justify-center mb-14"
+          >
+            <motion.div whileHover={{ scale: reduce ? 1 : 1.04 }} whileTap={{ scale: reduce ? 1 : 0.97 }} transition={{ duration: 0.14, ease: motionTokens.easing.sharp }}>
+              <Link href="/contact" className="inline-flex items-center gap-2 bg-brand-orange text-white font-heading font-bold px-8 py-4 rounded-full text-sm uppercase tracking-wide hover:bg-orange-600 transition-colors">
+                Get a Free Quote <ArrowUpRight size={16} />
+              </Link>
             </motion.div>
-
-            <motion.h1
-              variants={heroItem}
-              className="font-heading font-black text-2xl sm:text-3xl md:text-5xl lg:text-6xl text-white leading-tight mb-6"
-            >
-              Hatfield&apos;s Most Trusted{" "}
-              <span className="text-brand-orange">Heating &amp; Plumbing</span>{" "}
-              Specialists
-            </motion.h1>
-
-            <motion.p
-              variants={heroItem}
-              className="font-body text-gray-300 text-lg md:text-xl mb-8 leading-relaxed"
-            >
-              Professional boiler installation, repairs, underfloor heating and radiator services
-              across Hatfield and Hertfordshire. Available 24/7 for emergencies.
-            </motion.p>
-
-            <motion.div variants={heroItem} className="flex flex-col sm:flex-row gap-4 mb-10">
-              <motion.div
-                whileHover={{ scale: reduce ? 1 : 1.04 }}
-                whileTap={{ scale: reduce ? 1 : 0.97 }}
-                transition={{ duration: 0.14, ease: motionTokens.easing.sharp }}
-              >
-                <Link
-                  href="/contact"
-                  className="bg-brand-orange text-white font-heading font-bold px-8 py-4 rounded text-base uppercase tracking-wide hover:bg-orange-600 transition-colors text-center inline-block"
-                >
-                  Get a Free Quote
-                </Link>
-              </motion.div>
-              <motion.div
-                whileHover={{ scale: reduce ? 1 : 1.04 }}
-                whileTap={{ scale: reduce ? 1 : 0.97 }}
-                transition={{ duration: 0.14, ease: motionTokens.easing.sharp }}
-              >
-                <a
-                  href={`tel:${CONTACT.phoneTel}`}
-                  className="flex items-center justify-center gap-3 border-2 border-white text-white font-heading font-bold px-8 py-4 rounded text-base uppercase tracking-wide hover:bg-white hover:text-brand-black transition-colors"
-                >
-                  <Phone size={20} />
-                  Call {CONTACT.phone}
-                </a>
-              </motion.div>
-            </motion.div>
-
-            <motion.div variants={heroItem} className="flex flex-wrap gap-3 items-center">
-              <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-lg px-3 py-2">
-                <Image src="/gas-safe.png" alt="Gas Safe Register" width={80} height={80} className="object-contain rounded-xl overflow-hidden" />
-                <span className="font-body text-white text-xs sm:text-sm font-semibold">Gas Safe Registered</span>
-              </div>
-              {[
-                { icon: <Clock size={16} />, text: "24/7 Emergency" },
-                { icon: <Award size={16} />, text: "10+ Years" },
-                { icon: <Users size={16} />, text: "500+ Customers" },
-              ].map((badge) => (
-                <div key={badge.text} className="flex items-center gap-1.5 text-white/80 font-body text-xs sm:text-sm">
-                  <span className="text-brand-orange">{badge.icon}</span>
-                  {badge.text}
-                </div>
-              ))}
+            <motion.div whileHover={{ scale: reduce ? 1 : 1.04 }} whileTap={{ scale: reduce ? 1 : 0.97 }} transition={{ duration: 0.14, ease: motionTokens.easing.sharp }}>
+              <a href={`tel:${CONTACT.phoneTel}`} className="inline-flex items-center justify-center gap-2 border border-white/25 text-white font-heading font-bold px-8 py-4 rounded-full text-sm uppercase tracking-wide hover:border-white/60 hover:bg-white/5 transition-all">
+                <Phone size={16} /> {CONTACT.phone}
+              </a>
             </motion.div>
           </motion.div>
+
+          {/* Trust row */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+            className="flex flex-wrap justify-center gap-6 text-white/40 text-xs uppercase tracking-[0.15em]"
+          >
+            {[
+              { icon: <Shield size={12} />, text: "Gas Safe Registered" },
+              { icon: <Clock size={12} />, text: "24/7 Emergency" },
+              { icon: <Award size={12} />, text: "10+ Years" },
+              { icon: <Users size={12} />, text: "500+ Projects" },
+            ].map((b) => (
+              <span key={b.text} className="flex items-center gap-2">
+                <span className="text-brand-orange">{b.icon}</span>{b.text}
+              </span>
+            ))}
+          </motion.div>
         </div>
+
+        {/* Scroll hint */}
+        <motion.div
+          animate={reduce ? {} : { y: [0, 8, 0] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        >
+          <div className="w-px h-10 bg-gradient-to-b from-transparent to-white/30" />
+        </motion.div>
       </section>
 
-      {/* ── SERVICES GRID ── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
+      {/* ── MARQUEE TRUST STRIP ──────────────────────────── */}
+      <div className="bg-brand-orange py-3.5 overflow-hidden">
+        <div className="marquee-track gap-0">
+          {[...Array(2)].map((_, pass) => (
+            <div key={pass} className="flex items-center gap-0 shrink-0">
+              {[
+                "Gas Safe Registered",
+                "10+ Years Experience",
+                "500+ Projects Completed",
+                "24/7 Emergency Callouts",
+                "Fully Insured",
+                "Hatfield & Hertfordshire",
+                "Free Quotes",
+                "No Hidden Costs",
+              ].map((item) => (
+                <span key={item} className="flex items-center font-heading font-bold text-white text-xs uppercase tracking-[0.15em] whitespace-nowrap px-8">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white/50 mr-8 shrink-0" />
+                  {item}
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── SERVICES ─────────────────────────────────────── */}
+      <section className="bg-[#F5F5F5] py-24 md:py-32">
+        <div className="max-w-7xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: reduce ? 0 : 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: motionTokens.duration.slow, ease: motionTokens.easing.smooth }}
-            className="text-center mb-12"
+            className="mb-16"
           >
-            <h2 className="section-title">Our Services</h2>
-            <p className="section-subtitle max-w-2xl mx-auto">
-              From new boiler installations to emergency repairs, we cover all your heating and
-              plumbing needs across Hertfordshire.
-            </p>
+            <span className="font-body text-gray-400 text-xs uppercase tracking-[0.2em] block mb-4">What We Do</span>
+            <h2 className="section-title max-w-2xl">
+              <SplitText text="Professional Heating &" viewport delay={0} />
+              <br />
+              <SplitText text="Plumbing Services" viewport delay={0.15} />
+            </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="space-y-0">
             {SERVICES.map((service, i) => (
               <motion.div
                 key={service.id}
-                initial={{ opacity: 0, y: reduce ? 0 : 40 }}
+                id={service.id}
+                initial={{ opacity: 0, y: reduce ? 0 : 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                whileHover={reduce ? {} : { y: -8, boxShadow: "0 24px 48px -12px rgba(0,0,0,0.18)" }}
-                transition={{ duration: 0.45, delay: i * 0.1, ease: motionTokens.easing.smooth }}
-                className="group bg-white rounded-lg shadow-md overflow-hidden cursor-pointer"
+                transition={{ duration: 0.6, delay: 0, ease: motionTokens.easing.smooth }}
+                className="group grid lg:grid-cols-[1fr_auto] gap-6 items-center py-8 border-b border-[#E0E0E0] first:border-t cursor-pointer"
               >
-                <div className="relative h-48 overflow-hidden">
-                  <Image
-                    src={service.image}
-                    alt={service.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    unoptimized
-                  />
-                  <div className="absolute inset-0 bg-brand-black/30 group-hover:bg-brand-black/10 transition-colors" />
+                <div className="flex items-start gap-6 lg:gap-10">
+                  <span className="font-heading font-black text-[#D0D0D0] text-4xl md:text-5xl leading-none tabular-nums shrink-0 mt-1">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="text-brand-orange">{serviceIcons[service.icon]}</span>
+                      <h3 className="font-heading font-black text-2xl md:text-3xl text-[#0A0A0A] group-hover:text-brand-orange transition-colors duration-300">
+                        {service.title}
+                      </h3>
+                    </div>
+                    <p className="font-body text-gray-500 text-sm leading-relaxed max-w-xl">
+                      {service.shortDesc}
+                    </p>
+                  </div>
                 </div>
-                <div className="p-6">
+
+                <div className="flex items-center gap-4">
                   <motion.div
-                    whileHover={reduce ? {} : { scale: 1.12, rotate: -4 }}
-                    transition={{ duration: 0.22, ease: motionTokens.easing.smooth }}
-                    className="mb-3 inline-block"
+                    whileHover={{ scale: reduce ? 1 : 1.04 }}
+                    whileTap={{ scale: reduce ? 1 : 0.97 }}
+                    transition={{ duration: 0.14, ease: motionTokens.easing.sharp }}
                   >
-                    {serviceIcons[service.icon]}
+                    <Link
+                      href={`/services#${service.id}`}
+                      className="inline-flex items-center gap-2 border border-[#0A0A0A] text-[#0A0A0A] font-heading font-bold px-6 py-3 rounded-full text-xs uppercase tracking-wide hover:bg-[#0A0A0A] hover:text-white transition-all duration-200 whitespace-nowrap"
+                    >
+                      Learn More <ArrowUpRight size={14} />
+                    </Link>
                   </motion.div>
-                  <h3 className="font-heading font-bold text-xl text-brand-black mb-2">
-                    {service.title}
-                  </h3>
-                  <p className="font-body text-gray-600 text-sm leading-relaxed mb-4">
-                    {service.shortDesc}
-                  </p>
-                  <Link
-                    href={`/services#${service.id}`}
-                    className="font-heading font-semibold text-brand-orange text-sm uppercase tracking-wide hover:underline"
-                  >
-                    Learn More →
-                  </Link>
                 </div>
               </motion.div>
             ))}
@@ -264,10 +334,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── STATS BAR ── */}
-      <section className="bg-brand-black py-14">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-gray-700">
+      {/* ── STATS BAR ────────────────────────────────────── */}
+      <section className="bg-[#0A0A0A] py-20 md:py-28">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-4 divide-x divide-white/10">
             {STATS.map((stat, i) => (
               <AnimatedStat key={stat.label} value={stat.value} label={stat.label} delay={i * 0.1} />
             ))}
@@ -275,240 +345,205 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── ABOUT PREVIEW ── */}
-      <section className="py-20 bg-[#F5F5F5]">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+      {/* ── ABOUT PREVIEW ────────────────────────────────── */}
+      <section className="bg-white py-24 md:py-32">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+
+            {/* Image with clip-path reveal */}
             <motion.div
-              initial={{ opacity: 0, x: reduce ? 0 : -40 }}
+              initial={{ opacity: 0, x: reduce ? 0 : -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: motionTokens.duration.slow, ease: motionTokens.easing.smooth }}
+              className="relative order-2 lg:order-1"
             >
-              <h2 className="section-title">
-                Why Hatfield Trusts <span className="text-brand-orange">LukMaTic</span>
-              </h2>
-              <p className="font-body text-gray-600 text-base leading-relaxed mb-6">
-                With over 10 years serving Hatfield and Hertfordshire, LukMaTic has built a
-                reputation for quality workmanship, transparent pricing, and exceptional customer
-                service. Every engineer is Gas Safe registered and fully insured.
-              </p>
-
-              <motion.ul
-                className="space-y-3 mb-8"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={{
-                  hidden: {},
-                  visible: {
-                    transition: {
-                      staggerChildren: reduce ? 0 : 0.07,
-                      delayChildren: reduce ? 0 : 0.15,
-                    },
-                  },
-                }}
-              >
-                {[
-                  "Gas Safe registered engineers",
-                  "Fully insured — public liability & indemnity",
-                  "No hidden costs — upfront, honest pricing",
-                  "Tidy, respectful work — your home treated with care",
-                  "Aftercare and follow-up service",
-                  "Local to Hatfield — fast response times",
-                ].map((item) => (
-                  <motion.li
-                    key={item}
-                    variants={{
-                      hidden: { opacity: 0, x: reduce ? 0 : -16 },
-                      visible: {
-                        opacity: 1,
-                        x: 0,
-                        transition: { duration: 0.36, ease: motionTokens.easing.smooth },
-                      },
-                    }}
-                    className="flex items-center gap-3 font-body text-gray-700 text-sm"
-                  >
-                    <CheckCircle size={18} className="text-brand-orange shrink-0" />
-                    {item}
-                  </motion.li>
-                ))}
-              </motion.ul>
-
-              <div className="flex gap-4 mb-6">
-                <motion.div
-                  whileHover={{ scale: reduce ? 1 : 1.04 }}
-                  whileTap={{ scale: reduce ? 1 : 0.97 }}
-                  transition={{ duration: 0.14, ease: motionTokens.easing.sharp }}
-                >
-                  <Link
-                    href="/about"
-                    className="bg-brand-orange text-white font-heading font-bold px-6 py-3 rounded text-sm uppercase tracking-wide hover:bg-orange-600 transition-colors inline-block"
-                  >
-                    About Us
-                  </Link>
-                </motion.div>
-                <motion.div
-                  whileHover={{ scale: reduce ? 1 : 1.04 }}
-                  whileTap={{ scale: reduce ? 1 : 0.97 }}
-                  transition={{ duration: 0.14, ease: motionTokens.easing.sharp }}
-                >
-                  <Link
-                    href="/contact"
-                    className="border-2 border-brand-black text-brand-black font-heading font-bold px-6 py-3 rounded text-sm uppercase tracking-wide hover:bg-brand-black hover:text-white transition-colors inline-block"
-                  >
-                    Get a Quote
-                  </Link>
-                </motion.div>
-              </div>
-              <div className="flex items-center gap-3 bg-yellow-50 border border-yellow-200 rounded-xl p-4 max-w-xs">
-                <Image src="/gas-safe.png" alt="Gas Safe Register" width={130} height={130} className="object-contain rounded-xl overflow-hidden" />
-                <div>
-                  <p className="font-bold text-gray-900 text-sm">Gas Safe Registered</p>
-                  <p className="text-xs text-gray-600">All our engineers are fully certified</p>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: reduce ? 0 : 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: motionTokens.duration.slow, ease: motionTokens.easing.smooth }}
-              className="relative"
-            >
-              <div className="relative h-64 sm:h-80 md:h-[480px] rounded-lg overflow-hidden shadow-2xl">
-                <Image
-                  src="/plumber-pipes.png"
-                  alt="LukMaTic plumber at work"
-                  fill
-                  className="object-cover"
-                />
+              <div className="relative h-72 sm:h-96 md:h-[540px] rounded-2xl overflow-hidden">
+                <RevealImage src="/plumber-pipes.png" alt="LukMaTic engineer at work" />
               </div>
               <motion.div
                 animate={reduce ? {} : { y: [0, -7, 0] }}
-                transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-                className="hidden sm:block absolute -bottom-5 -left-5 bg-brand-orange text-white p-4 rounded-lg shadow-xl"
+                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                className="hidden sm:block absolute -bottom-6 -right-6 bg-brand-orange text-white px-6 py-4 rounded-2xl shadow-2xl"
               >
-                <div className="font-heading font-black text-2xl">10+</div>
-                <div className="font-body text-xs font-semibold">Years Experience</div>
+                <div className="font-heading font-black text-3xl">10+</div>
+                <div className="font-body text-xs font-semibold opacity-80">Years Experience</div>
               </motion.div>
               <motion.div
                 animate={reduce ? {} : { y: [0, -5, 0] }}
-                transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-                className="hidden sm:block absolute top-5 -right-5 bg-white text-brand-black p-3 rounded-lg shadow-xl border-l-4 border-brand-orange"
+                transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
+                className="hidden sm:block absolute top-6 -left-6 bg-white border border-gray-100 text-[#0A0A0A] px-5 py-3.5 rounded-2xl shadow-xl"
               >
                 <div className="font-heading font-bold text-sm">Gas Safe</div>
-                <div className="font-body text-xs text-gray-600">Registered</div>
+                <div className="font-body text-xs text-gray-400">Registered</div>
               </motion.div>
             </motion.div>
+
+            {/* Text */}
+            <div className="order-1 lg:order-2">
+              <motion.div
+                initial={{ opacity: 0, x: reduce ? 0 : 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: motionTokens.duration.slow, ease: motionTokens.easing.smooth }}
+              >
+                <span className="font-body text-gray-400 text-xs uppercase tracking-[0.2em] block mb-5">Why Choose Us</span>
+                <h2 className="section-title">
+                  <SplitText text="Why Hatfield" viewport delay={0} />
+                  <br />
+                  <SplitText text="Trusts" viewport delay={0.1} />
+                  <span className="text-brand-orange"> <SplitText text="LukMaTic" viewport delay={0.18} /></span>
+                </h2>
+                <p className="font-body text-gray-500 text-base leading-relaxed mb-8">
+                  With over 10 years serving Hatfield and Hertfordshire, LukMaTic has built a
+                  reputation for quality workmanship, transparent pricing, and exceptional customer
+                  service.
+                </p>
+
+                <motion.ul
+                  className="space-y-3 mb-10"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={{ hidden: {}, visible: { transition: { staggerChildren: reduce ? 0 : 0.06, delayChildren: reduce ? 0 : 0.1 } } }}
+                >
+                  {[
+                    "Gas Safe registered engineers",
+                    "Fully insured — public liability & indemnity",
+                    "No hidden costs — upfront, honest pricing",
+                    "Tidy, respectful work — your home treated with care",
+                    "Aftercare and follow-up service",
+                    "Local to Hatfield — fast response times",
+                  ].map((item) => (
+                    <motion.li
+                      key={item}
+                      variants={{
+                        hidden: { opacity: 0, x: reduce ? 0 : -14 },
+                        visible: { opacity: 1, x: 0, transition: { duration: 0.36, ease: motionTokens.easing.smooth } },
+                      }}
+                      className="flex items-center gap-3 font-body text-gray-600 text-sm"
+                    >
+                      <CheckCircle size={16} className="text-brand-orange shrink-0" />
+                      {item}
+                    </motion.li>
+                  ))}
+                </motion.ul>
+
+                <div className="flex flex-wrap gap-3">
+                  <motion.div whileHover={{ scale: reduce ? 1 : 1.04 }} whileTap={{ scale: reduce ? 1 : 0.97 }} transition={{ duration: 0.14, ease: motionTokens.easing.sharp }}>
+                    <Link href="/about" className="inline-flex items-center gap-2 bg-[#0A0A0A] text-white font-heading font-bold px-7 py-3.5 rounded-full text-sm uppercase tracking-wide hover:bg-brand-orange transition-colors">
+                      About Us <ArrowUpRight size={14} />
+                    </Link>
+                  </motion.div>
+                  <motion.div whileHover={{ scale: reduce ? 1 : 1.04 }} whileTap={{ scale: reduce ? 1 : 0.97 }} transition={{ duration: 0.14, ease: motionTokens.easing.sharp }}>
+                    <Link href="/contact" className="inline-flex items-center gap-2 border border-[#0A0A0A]/20 text-[#0A0A0A] font-heading font-bold px-7 py-3.5 rounded-full text-sm uppercase tracking-wide hover:border-brand-orange hover:text-brand-orange transition-all">
+                      Get a Quote
+                    </Link>
+                  </motion.div>
+                </div>
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── PORTFOLIO GALLERY ── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: reduce ? 0 : 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: motionTokens.duration.slow, ease: motionTokens.easing.smooth }}
-            className="text-center mb-12"
-          >
-            <h2 className="section-title">Recent Projects</h2>
-            <p className="section-subtitle max-w-2xl mx-auto">
-              A selection of our completed installations and repairs across Hertfordshire.
-            </p>
-          </motion.div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {/* ── PORTFOLIO ────────────────────────────────────── */}
+      <section className="bg-[#F5F5F5] py-24 md:py-32">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
+            <motion.div
+              initial={{ opacity: 0, y: reduce ? 0 : 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: motionTokens.duration.slow, ease: motionTokens.easing.smooth }}
+            >
+              <span className="font-body text-gray-400 text-xs uppercase tracking-[0.2em] block mb-4">Our Work</span>
+              <h2 className="section-title mb-0">Recent Projects</h2>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2, ease: motionTokens.easing.smooth }}
+            >
+              <motion.div whileHover={{ scale: reduce ? 1 : 1.04 }} whileTap={{ scale: reduce ? 1 : 0.97 }} transition={{ duration: 0.14, ease: motionTokens.easing.sharp }}>
+                <Link href="/portfolio" className="inline-flex items-center gap-2 border border-[#0A0A0A]/20 text-[#0A0A0A] font-heading font-bold px-6 py-3 rounded-full text-xs uppercase tracking-wide hover:bg-[#0A0A0A] hover:text-white hover:border-[#0A0A0A] transition-all">
+                  View All Projects <ArrowUpRight size={13} />
+                </Link>
+              </motion.div>
+            </motion.div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {PORTFOLIO.map((item, i) => (
               <motion.div
                 key={item.id}
-                initial={{ opacity: 0, scale: reduce ? 1 : 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: reduce ? 0 : 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                whileHover={reduce ? {} : { scale: 1.02 }}
-                transition={{ duration: 0.4, delay: i * 0.08, ease: motionTokens.easing.smooth }}
-                className="group relative h-64 rounded-lg overflow-hidden shadow-md cursor-pointer"
+                whileHover={reduce ? {} : { y: -6 }}
+                transition={{ duration: 0.45, delay: i * 0.07, ease: motionTokens.easing.smooth }}
+                className="group relative h-64 md:h-72 rounded-2xl overflow-hidden bg-gray-200 cursor-pointer"
               >
                 <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  src={item.image} alt={item.title} fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
                   unoptimized
                 />
-                <div className="absolute inset-0 bg-brand-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4">
-                  <span className="font-heading font-bold text-white text-lg text-center">{item.title}</span>
-                  <span className="font-body text-brand-orange text-sm mt-1 font-semibold">
-                    {item.category} — {item.location}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/80 via-[#0A0A0A]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+                <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-400">
+                  <span className="inline-block bg-brand-orange text-white font-heading font-bold text-[10px] px-3 py-1 rounded-full mb-2 uppercase tracking-wide">
+                    {item.category}
                   </span>
+                  <h3 className="font-heading font-bold text-white text-base">{item.title}</h3>
+                  <p className="font-body text-white/60 text-xs mt-0.5">{item.location}</p>
                 </div>
               </motion.div>
             ))}
           </div>
-          <motion.div
-            initial={{ opacity: 0, y: reduce ? 0 : 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: motionTokens.duration.slow, ease: motionTokens.easing.smooth }}
-            className="text-center mt-10"
-          >
-            <motion.div
-              whileHover={{ scale: reduce ? 1 : 1.04 }}
-              whileTap={{ scale: reduce ? 1 : 0.97 }}
-              transition={{ duration: 0.14, ease: motionTokens.easing.sharp }}
-              className="inline-block"
-            >
-              <Link
-                href="/portfolio"
-                className="bg-brand-black text-white font-heading font-bold px-8 py-3 rounded text-sm uppercase tracking-wide hover:bg-brand-orange transition-colors inline-block"
-              >
-                View All Projects
-              </Link>
-            </motion.div>
-          </motion.div>
         </div>
       </section>
 
-      {/* ── TESTIMONIALS ── */}
-      <section className="py-20 bg-[#F5F5F5]">
-        <div className="max-w-7xl mx-auto px-4">
+      {/* ── TESTIMONIALS ─────────────────────────────────── */}
+      <section className="bg-[#0A0A0A] py-24 md:py-32">
+        <div className="max-w-7xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: reduce ? 0 : 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: motionTokens.duration.slow, ease: motionTokens.easing.smooth }}
-            className="text-center mb-12"
+            className="mb-16"
           >
-            <h2 className="section-title">What Our Customers Say</h2>
-            <p className="section-subtitle max-w-xl mx-auto">
-              Hundreds of happy customers across Hatfield and Hertfordshire.
-            </p>
+            <span className="font-body text-white/30 text-xs uppercase tracking-[0.2em] block mb-4">Customer Reviews</span>
+            <h2 className="font-heading font-black text-4xl md:text-5xl lg:text-6xl text-white leading-tight">
+              <SplitText text="What Our Customers" viewport delay={0} />
+              <br />
+              <SplitText text="Say About Us" viewport delay={0.12} />
+            </h2>
           </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {TESTIMONIALS.map((t, i) => (
               <motion.div
                 key={t.name}
-                initial={{ opacity: 0, y: reduce ? 0 : 30 }}
+                initial={{ opacity: 0, y: reduce ? 0 : 28 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                whileHover={reduce ? {} : { y: -6, boxShadow: "0 16px 40px -8px rgba(0,0,0,0.14)" }}
-                transition={{ duration: 0.5, delay: i * 0.15, ease: motionTokens.easing.smooth }}
-                className="bg-white rounded-lg p-7 shadow-md border-t-4 border-brand-orange"
+                whileHover={reduce ? {} : { y: -5 }}
+                transition={{ duration: 0.5, delay: i * 0.12, ease: motionTokens.easing.smooth }}
+                className="bg-white/5 border border-white/10 rounded-2xl p-7 hover:border-white/20 transition-colors duration-300"
               >
-                <div className="flex gap-1 mb-4">
+                <div className="flex gap-0.5 mb-5">
                   {Array.from({ length: t.rating }).map((_, j) => (
-                    <Star key={j} size={18} className="fill-brand-orange text-brand-orange" />
+                    <Star key={j} size={14} className="fill-brand-orange text-brand-orange" />
                   ))}
                 </div>
-                <p className="font-body text-gray-700 text-sm leading-relaxed mb-5 italic">
+                <p className="font-body text-white/70 text-sm leading-relaxed mb-6 italic">
                   &ldquo;{t.text}&rdquo;
                 </p>
-                <div>
-                  <div className="font-heading font-bold text-brand-black text-sm">{t.name}</div>
-                  <div className="font-body text-gray-500 text-xs">{t.location}</div>
+                <div className="pt-5 border-t border-white/10">
+                  <div className="font-heading font-bold text-white text-sm">{t.name}</div>
+                  <div className="font-body text-white/40 text-xs mt-0.5">{t.location}</div>
                 </div>
               </motion.div>
             ))}
@@ -516,50 +551,38 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── CTA BANNER ── */}
-      <section className="bg-brand-orange py-16 overflow-hidden">
-        <motion.div
-          initial={{ opacity: 0, y: reduce ? 0 : 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: motionTokens.duration.slow, ease: motionTokens.easing.smooth }}
-          className="max-w-7xl mx-auto px-4 text-center"
-        >
-          <h2 className="font-heading font-black text-3xl md:text-4xl text-white mb-4">
-            Ready to Get Started?
-          </h2>
-          <p className="font-body text-orange-100 text-lg mb-8 max-w-xl mx-auto">
-            Get a free, no-obligation quote from Hatfield&apos;s most trusted heating and plumbing
-            specialists.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <motion.div
-              whileHover={{ scale: reduce ? 1 : 1.05 }}
-              whileTap={{ scale: reduce ? 1 : 0.96 }}
-              transition={{ duration: 0.14, ease: motionTokens.easing.sharp }}
-            >
-              <Link
-                href="/contact"
-                className="bg-white text-brand-orange font-heading font-bold px-8 py-4 rounded text-base uppercase tracking-wide hover:bg-gray-100 transition-colors inline-block"
-              >
-                Get a Free Quote
-              </Link>
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: reduce ? 1 : 1.05 }}
-              whileTap={{ scale: reduce ? 1 : 0.96 }}
-              transition={{ duration: 0.14, ease: motionTokens.easing.sharp }}
-            >
-              <a
-                href={`tel:${CONTACT.phoneTel}`}
-                className="flex items-center justify-center gap-3 border-2 border-white text-white font-heading font-bold px-8 py-4 rounded text-base uppercase tracking-wide hover:bg-white/10 transition-colors"
-              >
-                <Phone size={20} />
-                {CONTACT.phone}
-              </a>
-            </motion.div>
-          </div>
-        </motion.div>
+      {/* ── CTA BANNER ───────────────────────────────────── */}
+      <section className="bg-brand-orange py-24 md:py-32 overflow-hidden relative">
+        <div className="max-w-6xl mx-auto px-6 text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: reduce ? 0 : 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: motionTokens.duration.slow, ease: motionTokens.easing.smooth }}
+          >
+            <h2 className="font-heading font-black text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-[0.95] mb-8">
+              <SplitText text="Ready to Get" viewport delay={0} />
+              <br />
+              <SplitText text="Started?" viewport delay={0.12} />
+            </h2>
+            <p className="font-body text-white/70 text-lg mb-10 max-w-lg mx-auto leading-relaxed">
+              Get a free, no-obligation quote from Hatfield&apos;s most trusted heating and
+              plumbing specialists.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <motion.div whileHover={{ scale: reduce ? 1 : 1.05 }} whileTap={{ scale: reduce ? 1 : 0.96 }} transition={{ duration: 0.14, ease: motionTokens.easing.sharp }}>
+                <Link href="/contact" className="inline-flex items-center gap-2 bg-white text-brand-orange font-heading font-bold px-9 py-4 rounded-full text-sm uppercase tracking-wide hover:bg-gray-100 transition-colors">
+                  Get a Free Quote <ArrowUpRight size={16} />
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ scale: reduce ? 1 : 1.05 }} whileTap={{ scale: reduce ? 1 : 0.96 }} transition={{ duration: 0.14, ease: motionTokens.easing.sharp }}>
+                <a href={`tel:${CONTACT.phoneTel}`} className="inline-flex items-center justify-center gap-2 border-2 border-white/40 text-white font-heading font-bold px-9 py-4 rounded-full text-sm uppercase tracking-wide hover:border-white hover:bg-white/10 transition-all">
+                  <Phone size={16} /> {CONTACT.phone}
+                </a>
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
       </section>
     </>
   );

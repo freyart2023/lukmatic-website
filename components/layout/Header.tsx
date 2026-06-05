@@ -39,7 +39,7 @@ export default function Header() {
       </div>
 
       {/* Main nav */}
-      <nav className={`bg-brand-black transition-shadow duration-300 ${scrolled ? "shadow-2xl" : ""}`}>
+      <nav className={`bg-[#0A0A0A] transition-all duration-300 ${scrolled ? "shadow-2xl backdrop-blur-sm bg-[#0A0A0A]/95" : ""}`}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-14 sm:h-16 lg:h-20">
             {/* Logo */}
@@ -85,7 +85,7 @@ export default function Header() {
               >
                 <Link
                   href="/contact"
-                  className="bg-brand-orange text-white font-heading font-bold px-5 py-2.5 rounded text-sm uppercase tracking-wide hover:bg-orange-600 transition-colors inline-block"
+                  className="bg-brand-orange text-white font-heading font-bold px-6 py-2.5 rounded-full text-sm uppercase tracking-wide hover:bg-orange-600 transition-colors inline-block"
                 >
                   Free Quote
                 </Link>
@@ -192,7 +192,7 @@ export default function Header() {
                   <Link
                     href="/contact"
                     onClick={() => setMenuOpen(false)}
-                    className="mt-3 bg-brand-orange text-white font-heading font-bold px-5 py-3 rounded text-center text-sm uppercase tracking-wide w-full block"
+                    className="mt-3 bg-brand-orange text-white font-heading font-bold px-5 py-3 rounded-full text-center text-sm uppercase tracking-wide w-full block"
                   >
                     Get a Free Quote
                   </Link>

@@ -44,15 +44,30 @@ h1, h2, h3, h4, h5, h6 {
 
 @layer components {
   .btn-orange {
-    @apply bg-[#F07C00] text-white font-bold px-6 py-3 rounded hover:bg-[#E65100] transition-colors duration-200 inline-block;
+    @apply bg-[#F07C00] text-white font-bold px-8 py-4 rounded-full hover:bg-[#E65100] transition-colors duration-200 inline-block;
     font-family: var(--font-montserrat);
   }
   .section-title {
     font-family: var(--font-montserrat);
-    @apply font-bold text-3xl md:text-4xl text-[#1A1A1A] mb-4;
+    @apply font-black text-4xl md:text-5xl lg:text-6xl text-[#0A0A0A] mb-5 leading-tight;
   }
   .section-subtitle {
     font-family: var(--font-open-sans);
-    @apply text-gray-600 text-lg mb-8;
+    @apply text-gray-500 text-lg mb-10 leading-relaxed;
   }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
 }
