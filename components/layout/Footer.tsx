@@ -11,9 +11,14 @@ export default function Footer() {
           {/* Col 1: Logo + tagline */}
           <div className="text-center sm:text-left">
             <Link href="/" className="inline-block mb-4">
-              <div className="bg-white rounded-lg px-3 py-2 inline-block">
-                <Image src="/logo.png" alt="LukMaTic Logo" width={120} height={112} className="h-12 w-auto" />
-              </div>
+              <Image
+                src="/logo.png"
+                alt="LukMaTic Logo"
+                width={120}
+                height={112}
+                className="h-14 w-auto mx-auto sm:mx-0 mix-blend-screen"
+                style={{ filter: "invert(1) hue-rotate(180deg)" }}
+              />
             </Link>
             <p className="font-body text-gray-400 text-sm leading-relaxed mb-4">
               Hatfield&apos;s trusted heating and plumbing specialists. Gas Safe

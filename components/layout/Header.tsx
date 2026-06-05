@@ -44,9 +44,14 @@ export default function Header() {
           <div className="flex items-center justify-between h-14 sm:h-16 lg:h-20">
             {/* Logo */}
             <Link href="/" className="flex items-center">
-              <div className="bg-white rounded-lg px-2.5 py-1.5">
-                <Image src="/logo.png" alt="LukMaTic Logo" width={120} height={112} className="h-8 sm:h-9 md:h-11 w-auto" />
-              </div>
+              <Image
+                src="/logo.png"
+                alt="LukMaTic Logo"
+                width={120}
+                height={112}
+                className="h-10 sm:h-12 md:h-14 w-auto mix-blend-screen"
+                style={{ filter: "invert(1) hue-rotate(180deg)" }}
+              />
             </Link>
 
             {/* Desktop nav */}

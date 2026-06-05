@@ -283,9 +283,7 @@ export default function HomePage() {
           >
             <span className="font-body text-gray-400 text-xs uppercase tracking-[0.2em] block mb-4">What We Do</span>
             <h2 className="section-title max-w-2xl">
-              <SplitText text="Professional Heating &" viewport delay={0} />
-              <br />
-              <SplitText text="Plumbing Services" viewport delay={0.15} />
+              Professional Heating &<br />Plumbing Services
             </h2>
           </motion.div>
 
@@ -490,10 +488,8 @@ export default function HomePage() {
               >
                 <span className="font-body text-gray-400 text-xs uppercase tracking-[0.2em] block mb-5">Why Choose Us</span>
                 <h2 className="section-title">
-                  <SplitText text="Why Hatfield" viewport delay={0} />
-                  <br />
-                  <SplitText text="Trusts" viewport delay={0.1} />
-                  <span className="text-brand-orange"> <SplitText text="LukMaTic" viewport delay={0.18} /></span>
+                  Why Hatfield Trusts
+                  <span className="text-brand-orange"> LukMaTic</span>
                 </h2>
                 <p className="font-body text-gray-500 text-base leading-relaxed mb-8">
                   With over 10 years serving Hatfield and Hertfordshire, LukMaTic has built a
@@ -617,9 +613,7 @@ export default function HomePage() {
           >
             <span className="font-body text-white/30 text-xs uppercase tracking-[0.2em] block mb-4">Customer Reviews</span>
             <h2 className="font-heading font-black text-4xl md:text-5xl lg:text-6xl text-white leading-tight">
-              <SplitText text="What Our Customers" viewport delay={0} />
-              <br />
-              <SplitText text="Say About Us" viewport delay={0.12} />
+              What Our Customers<br />Say About Us
             </h2>
           </motion.div>
 
@@ -662,9 +656,7 @@ export default function HomePage() {
             transition={{ duration: motionTokens.duration.slow, ease: motionTokens.easing.smooth }}
           >
             <h2 className="font-heading font-black text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-[0.95] mb-8">
-              <SplitText text="Ready to Get" viewport delay={0} />
-              <br />
-              <SplitText text="Started?" viewport delay={0.12} />
+              Ready to Get<br />Started?
             </h2>
             <p className="font-body text-white/70 text-lg mb-10 max-w-lg mx-auto leading-relaxed">
               Get a free, no-obligation quote from Hatfield&apos;s most trusted heating and
