@@ -1,120 +1,68 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { CONTACT, SERVICES, NAV_LINKS } from "@/lib/constants";
 
 export default function Footer() {
   return (
-    <footer className="bg-brand-black text-white">
-      <div className="max-w-7xl mx-auto px-4 py-12 md:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Col 1: Logo + tagline */}
-          <div className="text-center sm:text-left">
-            <Link href="/" className="inline-block mb-4">
-              <Image
-                src="/logo.png"
-                alt="LukMaTic Logo"
-                width={120}
-                height={112}
-                className="h-14 w-auto mx-auto sm:mx-0 mix-blend-screen"
-                style={{ filter: "invert(1) hue-rotate(180deg)" }}
-              />
+    <footer className="site-footer band--ink">
+      <div className="container">
+        <div className="site-footer__cols">
+          <div className="site-footer__brand">
+            <Link href="/" className="logo-chip" aria-label="LukMaTic, home">
+              <Image src="/logo.png" alt="LukMaTic Logo" width={120} height={112} />
             </Link>
-            <p className="font-body text-gray-400 text-sm leading-relaxed mb-4">
-              Hatfield&apos;s trusted heating and plumbing specialists. Gas Safe
-              registered engineers delivering quality workmanship since 2014.
+            <p>
+              Hatfield&apos;s trusted heating and plumbing specialists. Gas Safe registered engineers delivering
+              quality workmanship since 2014.
             </p>
-            <div className="mt-4 bg-white/5 rounded-lg p-3 w-fit mx-auto sm:mx-0">
-              <Image src="/gas-safe.png" alt="Gas Safe Register" width={80} height={80} className="object-contain rounded-xl overflow-hidden" />
-            </div>
+            <Image src="/gas-safe.png" alt="Gas Safe Register" width={64} height={64} />
           </div>
 
-          {/* Col 2: Quick links */}
-          <div className="text-center sm:text-left">
-            <h3 className="font-heading font-bold text-base uppercase tracking-widest text-brand-orange mb-5">
-              Quick Links
-            </h3>
-            <ul className="space-y-2">
+          <div>
+            <h2>Quick links</h2>
+            <ul>
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="font-body text-gray-400 text-sm hover:text-brand-orange transition-colors">
-                    {link.label}
-                  </Link>
+                  <Link href={link.href}>{link.label}</Link>
                 </li>
               ))}
               <li>
-                <Link href="/contact" className="font-body text-gray-400 text-sm hover:text-brand-orange transition-colors">
-                  Free Quote
-                </Link>
+                <Link href="/contact">Free Quote</Link>
               </li>
             </ul>
           </div>
 
-          {/* Col 3: Services */}
-          <div className="text-center sm:text-left">
-            <h3 className="font-heading font-bold text-base uppercase tracking-widest text-brand-orange mb-5">
-              Our Services
-            </h3>
-            <ul className="space-y-2">
+          <div>
+            <h2>Our services</h2>
+            <ul>
               {SERVICES.map((service) => (
                 <li key={service.id}>
-                  <Link
-                    href={`/services#${service.id}`}
-                    className="font-body text-gray-400 text-sm hover:text-brand-orange transition-colors"
-                  >
-                    {service.title}
-                  </Link>
+                  <Link href={`/services#${service.id}`}>{service.title}</Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Col 4: Contact */}
-          <div className="text-center sm:text-left">
-            <h3 className="font-heading font-bold text-base uppercase tracking-widest text-brand-orange mb-5">
-              Contact Us
-            </h3>
-            <ul className="space-y-4">
+          <div>
+            <h2>Contact us</h2>
+            <ul>
               <li>
-                <a
-                  href={`tel:${CONTACT.phoneTel}`}
-                  className="flex items-start gap-3 text-gray-400 text-sm hover:text-brand-orange transition-colors group justify-center sm:justify-start"
-                >
-                  <Phone size={16} className="text-brand-orange mt-0.5 shrink-0" />
-                  <span className="font-body">{CONTACT.phone}</span>
-                </a>
+                <a href={`tel:${CONTACT.phoneTel}`}>{CONTACT.phone}</a>
               </li>
               <li>
-                <a
-                  href={`mailto:${CONTACT.email}`}
-                  className="flex items-start gap-3 text-gray-400 text-sm hover:text-brand-orange transition-colors justify-center sm:justify-start"
-                >
-                  <Mail size={16} className="text-brand-orange mt-0.5 shrink-0" />
-                  <span className="font-body break-all">{CONTACT.email}</span>
-                </a>
+                <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
               </li>
-              <li className="flex items-start gap-3 text-gray-400 text-sm justify-center sm:justify-start">
-                <MapPin size={16} className="text-brand-orange mt-0.5 shrink-0" />
-                <span className="font-body">{CONTACT.address}</span>
-              </li>
-              <li className="flex items-start gap-3 text-gray-400 text-sm justify-center sm:justify-start">
-                <Clock size={16} className="text-brand-orange mt-0.5 shrink-0" />
-                <div className="font-body">
-                  <div>{CONTACT.hours.weekday}</div>
-                  <div>{CONTACT.hours.saturday}</div>
-                  <div className="text-brand-orange font-semibold mt-1">{CONTACT.hours.emergency}</div>
-                </div>
-              </li>
+              <li>{CONTACT.address}</li>
+              <li>{CONTACT.hours.weekday}</li>
+              <li>{CONTACT.hours.saturday}</li>
+              <li>{CONTACT.hours.emergency}</li>
             </ul>
           </div>
         </div>
-      </div>
 
-      {/* Bottom bar */}
-      <div className="border-t border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm text-gray-500 font-body text-center sm:text-left">
+        <div className="site-footer__legal">
           <p>&copy; 2011 LukMaTic Ltd. All rights reserved.</p>
-          <p>Hatfield, Hertfordshire | Gas Safe Registered</p>
+          <p>Hatfield, Hertfordshire. Gas Safe Registered.</p>
         </div>
       </div>
     </footer>

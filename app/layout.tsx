@@ -28,18 +28,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en-GB" suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
+        {/* Marks that scripting runs, so motion only hides what a script will show. */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+        <link rel="preload" href="/fonts/epilogue-700.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
       </head>
-      <body className="antialiased bg-white">
+      <body>
         <Header />
-        <main className="pt-[82px] sm:pt-[90px] lg:pt-[108px]">{children}</main>
+        <main id="main">{children}</main>
         <Footer />
         <TawkChat />
         <WhatsAppButton />

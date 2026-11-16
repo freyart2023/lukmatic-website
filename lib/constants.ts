@@ -5,12 +5,24 @@ export const CONTACT = {
   email: "info@lukmatic.co.uk",
   address: "Hatfield, Hertfordshire",
   hours: {
-    weekday: "Mon–Fri: 7:00am – 7:00pm",
-    saturday: "Saturday: 8:00am – 5:00pm",
-    sunday: "Sunday: Emergency Callouts Only",
+    weekday: "Monday to Friday, 7am to 7pm",
+    saturday: "Saturday, 8am to 5pm",
+    sunday: "Sunday, emergency callouts only",
     emergency: "24/7 Emergency Callouts Available",
   },
 };
+
+/* Opening hours as data, so the site can mark today and say whether the office is open.
+   day: 0 = Sunday … 6 = Saturday. open/close in 24h UK time; null = emergencies only. */
+export const HOURS = [
+  { day: 1, label: "Monday", open: 7, close: 19 },
+  { day: 2, label: "Tuesday", open: 7, close: 19 },
+  { day: 3, label: "Wednesday", open: 7, close: 19 },
+  { day: 4, label: "Thursday", open: 7, close: 19 },
+  { day: 5, label: "Friday", open: 7, close: 19 },
+  { day: 6, label: "Saturday", open: 8, close: 17 },
+  { day: 0, label: "Sunday", open: null, close: null },
+] as const;
 
 export const SERVICES = [
   {
@@ -23,7 +35,7 @@ export const SERVICES = [
     icon: "Flame",
     features: [
       "Free home survey and recommendation",
-      "All major brands — Worcester Bosch, Viessmann, Ideal, Baxi",
+      "All major brands: Worcester Bosch, Viessmann, Ideal, Baxi",
       "10-year warranty options available",
       "Same-week installation available",
       "Full Gas Safe registration",
@@ -100,7 +112,7 @@ export const TESTIMONIALS = [
   {
     name: "James T.",
     location: "St Albans",
-    text: "Called them for an emergency — no hot water on a Friday evening. They came within 2 hours and had it fixed the same night. Brilliant service, fair price.",
+    text: "Called them for an emergency, no hot water on a Friday evening. They came within 2 hours and had it fixed the same night. Brilliant service, fair price.",
     rating: 5,
   },
   {
